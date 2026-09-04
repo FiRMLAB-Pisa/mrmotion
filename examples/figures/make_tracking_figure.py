@@ -17,7 +17,7 @@ angles = np.arange(SPOKES) * np.pi * (3 - np.sqrt(5))
 radius = np.linspace(-0.5, 0.5, GRID, endpoint=False)
 traj = np.stack([np.outer(np.cos(angles), radius),
                  np.outer(np.sin(angles), radius)], -1).reshape(-1, 2)
-dens = np.tile(np.abs(radius), SPOKES)
+dens = mm.estimate_density(traj, (GRID, GRID))   # once, at start-up
 
 def acquire(image):
     k = 2 * np.pi * traj * GRID / N

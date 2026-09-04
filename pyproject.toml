@@ -22,7 +22,14 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
 ]
 
-dependencies = ["numpy", "scipy", "SimpleITK", "finufft", "threadpoolctl"]
+dependencies = [
+  "numpy",
+  "scipy",
+  "SimpleITK",
+  "finufft",
+  "mri-nufft",
+  "threadpoolctl",
+]
 
 [project.optional-dependencies]
 dev = [

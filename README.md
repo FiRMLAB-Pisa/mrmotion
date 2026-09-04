@@ -30,6 +30,13 @@ across the scan by a filter.
   than one that always takes 40. Four libraries take threads and each is told
   separately; `thread_counts()` reads them back so the tests assert them from
   inside the block
+- **Each sample is weighted by how densely its neighbourhood was visited**, and
+  the weights are estimated once, when the application learns the trajectory,
+  because they are a property of the trajectory and not of the head. The
+  analytic ramp is the usual shortcut and it over-weights exactly the outer
+  k-space a navigator leaves sparse: on a 96² navigator of 96 golden-angle
+  spokes it costs a factor of ten in the pose, 1.5° and 0.9 px against 0.1° and
+  0.1 px
 - **FINUFFT is told per call**, because it has no global to set — the count
   travels with the plan the navigator reconstruction builds, and there is a test
   that it arrives
@@ -49,8 +56,11 @@ pip install mrmotion
 ```python
 import mrmotion as mm
 
+# once, when the application learns the trajectory
+density = mm.estimate_density(trajectory, shape=(64, 64))
+
 # k-space along each plane -> plane images, FINUFFT on one thread
-planes = mm.reconstruct_navigator(kspace, trajectory, shape=(64, 64))
+planes = mm.reconstruct_navigator(kspace, trajectory, (64, 64), density=density)
 
 # planes -> a filtered pose, registered against the first navigator seen
 tracker = mm.NavigatorMotionTracker()
@@ -60,6 +70,29 @@ pose = tracker.track(planes, axes, dt=0.1, spacing=10.0)
 with mm.single_threaded():
     ...
 ```
+
+## What a navigator costs
+
+One core, no GPU, three planes per navigator, measured by
+`python scripts/benchmark_latency.py` (a 4060 Laptop's CPU; run it on yours):
+
+| | 64², 1 coil | 64², 8 coils | 96², 1 coil | 96², 8 coils |
+|---|---|---|---|---|
+| density, once at start-up | 123 ms | — | 208 ms | — |
+| grid one plane | 1.2 ms | 6.2 ms | 1.4 ms | 10.7 ms |
+| register one plane | 11.9 ms | 10.0 ms | 12.1 ms | 12.0 ms |
+| **a whole navigator** | **52 ms** | **76 ms** | **94 ms** | **121 ms** |
+
+Gridding runs at about 7 Msample/s and scales with the samples, so the coil
+count multiplies it and the matrix size barely moves it. Registration costs
+several times more than the gridding of the same plane and does not care how
+many coils fed it, which is what sets the budget: a navigator every half second
+spends a fifth of a core.
+
+A converged density is what buys the right to grid at all. A 20-iteration CG
+reconstruction of the same planes measures the pose to 0.05° and 0.11 px; the
+weighted adjoint reaches 0.10° and 0.11 px for 1/47 of the per-navigator cost,
+having paid its 200 ms once.
 
 ## Examples
 
@@ -73,6 +106,10 @@ with mm.single_threaded():
 - **SimpleITK** — <https://simpleitk.org/>. The rigid registration each plane is
   measured with.
 - **FINUFFT** — <https://finufft.readthedocs.io/>. What grids the navigator.
+- **mri-nufft** — <https://mind-inria.github.io/mri-nufft/>. Its implementation
+  of the Pipe–Menon fixed point is what `estimate_density` runs.
+- Pipe JG, Menon P. *Sampling density compensation in MRI: rationale and an
+  iterative numerical solution.* Magn Reson Med 1999;41:179-186.
 - **`lab-midas/ismrm-moco-workshop`** —
   <https://github.com/lab-midas/ismrm-moco-workshop>. Hands-on motion estimation
   and correction, and the basis for the example.

@@ -10,6 +10,7 @@ try:
 except PackageNotFoundError:  # a source tree that was never installed
     __version__ = "0.0.0.dev0"
 
+from ._density import estimate_density
 from ._motion import (
     NavigatorMotionTracker,
     RigidMotionEKF,
@@ -25,6 +26,7 @@ __all__ = [
     "RigidMotionEstimate",
     "RigidRegistration",
     "__version__",
+    "estimate_density",
     "reconstruct_navigator",
     "single_threaded",
     "thread_counts",
