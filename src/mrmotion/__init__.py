@@ -10,9 +10,19 @@ try:
 except PackageNotFoundError:  # a source tree that was never installed
     __version__ = "0.0.0.dev0"
 
+from ._motion import (
+    NavigatorMotionTracker,
+    RigidMotionEKF,
+    RigidMotionEstimate,
+    RigidRegistration,
+)
 from ._threads import single_threaded, thread_counts
 
 __all__ = [
+    "NavigatorMotionTracker",
+    "RigidMotionEKF",
+    "RigidMotionEstimate",
+    "RigidRegistration",
     "__version__",
     "single_threaded",
     "thread_counts",
