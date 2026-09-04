@@ -9,6 +9,13 @@ filter, with every library held to one thread.
 [![PyPI](https://img.shields.io/pypi/v/mrmotion.svg)](https://pypi.org/project/mrmotion/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+![A navigator plane and a tracked pose](examples/figures/tracking.png)
+
+*A brain slice from the [ISMRM motion-correction workshop](https://github.com/lab-midas/ismrm-moco-workshop),
+the 96² navigator plane gridded from 96 golden-angle spokes of its k-space, and
+the head's translation tracked across 20 navigators from three such planes.
+Reproduce it with `python examples/figures/make_tracking_figure.py`.*
+
 A navigator resolves six degrees of freedom out of images that are each only
 two-dimensional. One plane sees the motion in its own plane — rotation about its
 normal, translation along its two axes — and planes that between them span the
@@ -53,6 +60,13 @@ pose = tracker.track(planes, axes, dt=0.1, spacing=10.0)
 with mm.single_threaded():
     ...
 ```
+
+## Examples
+
+- [`examples/tracking.ipynb`](examples/tracking.ipynb) — k-space to a tracked
+  pose on real anatomy: the navigator's trajectory extent and what it sets, one
+  plane against the full-resolution image, six degrees of freedom out of three
+  planes, and what `process_noise` does to the filter.
 
 ## Related Works
 
