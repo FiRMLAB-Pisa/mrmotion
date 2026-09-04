@@ -49,6 +49,5 @@ def test_a_larger_count_is_allowed() -> None:
 
 
 def test_zero_threads_is_refused() -> None:
-    with pytest.raises(ValueError, match="at least 1"):
-        with single_threaded(0):
-            pass
+    with pytest.raises(ValueError, match="at least 1"), single_threaded(0):
+        pass
