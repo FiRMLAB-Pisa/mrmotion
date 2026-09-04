@@ -16,6 +16,7 @@ from ._motion import (
     RigidMotionEstimate,
     RigidRegistration,
 )
+from ._navigator import reconstruct_navigator
 from ._threads import single_threaded, thread_counts
 
 __all__ = [
@@ -24,6 +25,7 @@ __all__ = [
     "RigidMotionEstimate",
     "RigidRegistration",
     "__version__",
+    "reconstruct_navigator",
     "single_threaded",
     "thread_counts",
 ]
