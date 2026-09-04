@@ -10,4 +10,10 @@ try:
 except PackageNotFoundError:  # a source tree that was never installed
     __version__ = "0.0.0.dev0"
 
-__all__ = ["__version__"]
+from ._threads import single_threaded, thread_counts
+
+__all__ = [
+    "__version__",
+    "single_threaded",
+    "thread_counts",
+]
