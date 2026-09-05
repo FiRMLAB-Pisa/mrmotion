@@ -54,12 +54,12 @@ class RigidMotionEstimate:
     --------
     Six parameters -- three rotations and three translations -- about a centre.
 
-    >>> import torch
+    >>> import numpy as np
     >>> import mrmotion as mm
     >>> estimate = mm.RigidMotionEstimate(
-    ...     parameters=torch.zeros(6), center=torch.zeros(3)
+    ...     parameters=np.zeros(6), center=np.zeros(3)
     ... )
-    >>> tuple(estimate.parameters.shape), estimate.metric is None
+    >>> estimate.parameters.shape, estimate.metric is None
     ((6,), True)
     """
 
