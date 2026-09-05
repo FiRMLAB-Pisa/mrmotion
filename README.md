@@ -82,7 +82,7 @@ into the notebook.
 | [`01-navigator`](examples/01-navigator.ipynb) | k-space to a plane: what the trajectory's extent sets, what the density weighting is worth, and coils | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FiRMLAB-Pisa/mrmotion/blob/main/examples/01-navigator.ipynb) |
 | [`02-tracking`](examples/02-tracking.ipynb) | six degrees of freedom from three planes, `process_noise`, and the latency of one navigator | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FiRMLAB-Pisa/mrmotion/blob/main/examples/02-tracking.ipynb) |
 
-## What a navigator costs
+## What it costs
 
 One core, no GPU, three planes per navigator, measured by
 `python scripts/benchmark_latency.py` (a 4060 Laptop's CPU; run it on yours):
