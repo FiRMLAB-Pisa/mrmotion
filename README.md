@@ -71,6 +71,17 @@ with mm.single_threaded():
     ...
 ```
 
+## Examples
+
+The `.py` beside each notebook is the source — it runs as a script and lints
+with the rest of the package, and `scripts/build_examples.sh` is what turns it
+into the notebook.
+
+| | | |
+|---|---|---|
+| [`01-navigator`](examples/01-navigator.ipynb) | k-space to a plane: what the trajectory's extent sets, what the density weighting is worth, and coils | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FiRMLAB-Pisa/mrmotion/blob/main/examples/01-navigator.ipynb) |
+| [`02-tracking`](examples/02-tracking.ipynb) | six degrees of freedom from three planes, `process_noise`, and the latency of one navigator | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FiRMLAB-Pisa/mrmotion/blob/main/examples/02-tracking.ipynb) |
+
 ## What a navigator costs
 
 One core, no GPU, three planes per navigator, measured by
@@ -94,13 +105,6 @@ reconstruction of the same planes measures the pose to 0.05° and 0.11 px; the
 weighted adjoint reaches 0.10° and 0.11 px for 1/47 of the per-navigator cost,
 having paid its 200 ms once.
 
-## Examples
-
-- [`examples/tracking.ipynb`](examples/tracking.ipynb) — k-space to a tracked
-  pose on real anatomy: the navigator's trajectory extent and what it sets, one
-  plane against the full-resolution image, six degrees of freedom out of three
-  planes, and what `process_noise` does to the filter.
-
 ## Related Works
 
 - **SimpleITK** — <https://simpleitk.org/>. The rigid registration each plane is
@@ -122,4 +126,5 @@ having paid its 200 ms once.
 pip install -e .[dev]
 bash scripts/format_and_lint.sh
 pytest -q
+bash scripts/build_examples.sh    # rebuild the notebooks and their figures
 ```
